@@ -17,5 +17,9 @@ public class Piste {
     public double X;
     public double Y;
     public int Group;
-
+    public Piste(double x, double y) {
+    	this.X = x;
+    	this.Y = y;
+    }
+    public Piste() {}
 }

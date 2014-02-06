@@ -31,10 +31,10 @@ public class Clusterer {
      * @param maxIter Iteraatioiden maksimimäärä
      * @return
      */
-    public static List<Piste> GetKmeans(List<Piste> pisteet, int clusterNumber, int maxIter) throws Exception {
-        if (pisteet.size() < clusterNumber) {
-            throw new Exception("Liian vähän pisteitä.");
-        }
+    public static ArrayList<Piste> GetKmeans(List<Piste> pisteet, int clusterNumber, int maxIter) { //throws Exception {
+//        if (pisteet.size() < clusterNumber) {
+//            throw new Exception("Liian vähän pisteitä.");
+//        }
 
         // Valitaan randomisti clusterNumberien määrä alkupisteitä
         ArrayList<Piste> keskipisteet = new ArrayList<Piste>(clusterNumber);
@@ -43,7 +43,7 @@ public class Clusterer {
         while (i < clusterNumber) {
             int pointer = (int) (Math.random() * (pisteet.size() + 1));
 
-            Piste current = pisteet.get(i);
+            Piste current = pisteet.get(pointer);
             if (!keskipisteet.contains(current)) {
                 current.Group = i;
                 keskipisteet.add(current);
@@ -55,19 +55,24 @@ public class Clusterer {
             p.Group = LahinKeskus(p, keskipisteet);
         }
 
+        int iter = 0;
         do {
             for (int j = 0; j < keskipisteet.size(); j++) {
                 keskipisteet.set(j, PaivitaKeskipisteenSijainti(j, pisteet));
             }
-        } while (true);
+            for (Piste p : pisteet) {
+            	p.Group = LahinKeskus(p, keskipisteet);
+            }
+            iter++;
+        } while (iter < maxIter);
 
-        return null;
+        return keskipisteet;
 
     }
 
     private static int LahinKeskus(Piste vertailupiste, ArrayList<Piste> keskipisteet) {
         Piste min = keskipisteet.get(0);
-        double dis = Double.MAX_VALUE;
+        double dis = Double.POSITIVE_INFINITY;
         for (Piste p : keskipisteet) {
             /*
              * Huomauautus tarkastajalle: Ei tarvitse laskea kahden pisteen välistä matkaa, koska
