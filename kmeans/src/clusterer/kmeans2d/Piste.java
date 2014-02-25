@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package kmeans.Clusterer;
+package clusterer.kmeans2d;
 
 /**
  *

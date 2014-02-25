@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package kmeans.Clusterer;
+package clusterer.kmeans2d;
 
 /**
  *
@@ -17,9 +17,9 @@ import java.util.List;
  *
  * @author timi
  */
-public class Clusterer {
+public class Kmeans2d {
 
-    public Clusterer() {
+    public Kmeans2d() {
         System.out.println("Trol");
     }
 
