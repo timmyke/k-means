@@ -1,12 +1,11 @@
 package clusterer.test;
 
+import clusterer.kmeans2d.Kmeans2d;
+import clusterer.kmeans2d.Piste;
 import java.awt.*;
 import java.awt.geom.*;
-import javax.swing.*;
 import java.util.ArrayList;
-
-import clusterer.kmeans2d.Piste;
-import clusterer.kmeans2d.Kmeans2d;
+import javax.swing.*;
 
 public class Testi extends JPanel {
     /**
@@ -48,7 +47,15 @@ public class Testi extends JPanel {
             Piste p = new Piste(x, y);
             pisteet.add(p);
         }
-        ArrayList<Piste> kp = Kmeans2d.GetKmeans(pisteet, 4, 100);
+        
+        ArrayList<Piste> kp;
+        
+        try {
+            kp = (ArrayList) Kmeans2d.GetKmeans2d(pisteet, 4, 100);
+        }
+        catch (Exception e) {
+            return;
+        }
         
         for (Piste p : pisteet) {
         	if (p.Group == 0) {

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package clusterer.kmeans2d;
 
 /**
@@ -27,20 +26,20 @@ public class Kmeans2d {
      * Laskee K-meanin
      *
      * @param pisteet Pisteet
-     * @param clusterNumber Kuinka moneen klusteriin jaetaan
+     * @param k Kuinka moneen klusteriin jaetaan i
      * @param maxIter Iteraatioiden maksimimäärä
      * @return
      */
-    public static ArrayList<Piste> GetKmeans(List<Piste> pisteet, int clusterNumber, int maxIter) { //throws Exception {
-//        if (pisteet.size() < clusterNumber) {
-//            throw new Exception("Liian vähän pisteitä.");
-//        }
+    public static List<Piste> GetKmeans2d(List<Piste> pisteet, int k, int maxIter) throws Exception {
+        if (pisteet.size() < k) {
+            throw new Exception("Liian vähän pisteitä.");
+        }
 
-        // Valitaan randomisti clusterNumberien määrä alkupisteitä
-        ArrayList<Piste> keskipisteet = new ArrayList<Piste>(clusterNumber);
+        // Valitaan randomisti klustereiden keskusta alkupisteistä. 
+        List<Piste> keskipisteet = new ArrayList<Piste>(k);
 
         int i = 0;
-        while (i < clusterNumber) {
+        while (i < k) {
             int pointer = (int) (Math.random() * (pisteet.size() + 1));
 
             Piste current = pisteet.get(pointer);
@@ -51,18 +50,19 @@ public class Kmeans2d {
             }
         }
 
-        for (Piste p : pisteet) {
-            p.Group = LahinKeskus(p, keskipisteet);
-        }
+        // Liittään pisteen arvottuihin klusterihin
+        LiitaLahimpaanKeskukseen(pisteet, keskipisteet);
 
+        // Tarkenetaan randomisti valittuja klustereita
         int iter = 0;
         do {
-            for (int j = 0; j < keskipisteet.size(); j++) {
-                keskipisteet.set(j, PaivitaKeskipisteenSijainti(j, pisteet));
-            }
-            for (Piste p : pisteet) {
-            	p.Group = LahinKeskus(p, keskipisteet);
-            }
+            // Päivitetään klusterin keskipisteiden sijainti klusteriin liitettyjen pisteiden 
+            //for (int j = 0; j < keskipisteet.size(); j++) {
+              //  keskipisteet.set(j, PaivitaKeskipisteenSijainti(k, pisteet)); // Oletetaan että k << n 
+            //}
+            keskipisteet = PaivitaKeskipisteenSijainti(k, pisteet);
+            // Liitetään pisteet tarkennettuihin klustereihin.
+            LiitaLahimpaanKeskukseen(pisteet, keskipisteet);
             iter++;
         } while (iter < maxIter);
 
@@ -70,7 +70,7 @@ public class Kmeans2d {
 
     }
 
-    private static int LahinKeskus(Piste vertailupiste, ArrayList<Piste> keskipisteet) {
+    private static int LahinKeskus(Piste vertailupiste, List<Piste> keskipisteet) {
         Piste min = keskipisteet.get(0);
         double dis = Double.POSITIVE_INFINITY;
         for (Piste p : keskipisteet) {
@@ -89,6 +89,18 @@ public class Kmeans2d {
     }
 
     /**
+     * Liittää pisteet lähimpään klusteriin
+     *
+     * @param pisteet Pisteet, jotka liitetään klusteriin (huom. sivuvaikutus)
+     * @param keskipisteet Klusterit
+     */
+    private static void LiitaLahimpaanKeskukseen(List<Piste> pisteet, List<Piste> keskipisteet) {
+        for (Piste p : pisteet) {
+            p.Group = LahinKeskus(p, keskipisteet);
+        }
+    }
+
+    /**
      * Laskee kahden pisteen etäisyyden neliön.
      *
      * @param a
@@ -99,24 +111,45 @@ public class Kmeans2d {
         return Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2);
     }
 
-    private static Piste PaivitaKeskipisteenSijainti(int index, List<Piste> pisteet) {
-        double x = 0, y = 0;
-        
-        // Counteri keskiarvon laskemista varten.
-        int c = 0;
-        for (Piste piste : pisteet) {
-            if (piste.Group == index) {
-                x += piste.X;
-                y += piste.Y;
-                c++;
-            }
+    /**
+     * Päivittää klusterin keskipisteen siihen kuuluvien pisteiden sijainnin
+     * perusteella
+     *
+     * @param k Klusterin numero
+     * @param pisteet Kaikki pisteet, joiden perusteella valitaan klusterin
+     * numeron perusteella klusteriin kuuluvat pisteet.
+     * @return Uudet keskipisteet
+     */
+    private static List<Piste> PaivitaKeskipisteenSijainti(int k, List<Piste> pisteet) {
+        List<double[]> keskipisteet = new ArrayList<double[]>(k);
+        for (int i= 0; i<k ; i++) {
+            double[] kp = new double[3]; 
+            kp[0] = 0;
+            kp[1] = 0;
+            kp[2] = 0;
+            keskipisteet.add(kp);
         }
-        Piste p = new Piste();
-        p.X = x/c;
-        p.Y = y/c;
-        p.Group = index;
-        return p;
+
+        for (Piste piste : pisteet) {
+            double[] keski = keskipisteet.get(piste.Group);
+            // lasketaan klusterin leveys ja korkeus (eli pisteiden kehys)
+            keski[0] += piste.X; 
+            keski[1] += piste.Y;
+            keski[2] += 1; // counteri kuinka monta pistettä klusterissa
+        }
         
+        List<Piste> uudetKeskipisteet = new ArrayList<Piste>(k);
+        int kIndex = 0;
+        for (double[] kp : keskipisteet) {
+            Piste p = new Piste();
+            p.X = kp[0] / kp[2];
+            p.Y = kp[1] / kp[2];
+            p.Group = kIndex;
+            kIndex++;
+            uudetKeskipisteet.add(p);
+        }
         
+        return uudetKeskipisteet;
+
     }
 }
