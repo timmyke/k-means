@@ -1,0 +1,58 @@
+2d-pistejoukon klusterointi k keskiarvo -algoritmilla
+
+Tietorakenteet ja algoritmit II
+Ohjaaja: Tomi Suomi
+Laatijat: 
+Kimmo Kettunen (68220) kmpket@utu.fi
+Timi Suominen (505890) tijusuo@utu.fi
+x.x.2014
+Turku
+ 
+Table of Contents
+TEHTÄVÄN KUVAUS JA ANALYSOINTI  3
+RATKAISUPERIAATE    3
+OHJELMAN JA SEN OSIEN KUVAAMINEN (LÄHINNÄ MODUULIEN KUVAUS KOHDASTA 3.5)    3
+TESTAUSJÄRJESTELY   4
+LIITTEET:   4
+
+
+Tehtävän kuvaus ja analysointi 
+
+Tehtävänä oli ryhmitellä 2d-pistejoukon pisteet merkityksellisiin luokkiin (myöhemmin klustereihin). Tarkasteltavaksi algoritmiksi valitsimme yleisesti käytetyn k keskiarvot (k-means). 
+
+
+Tehtävän kuvauksessa selostetaan annettu tehtävä ja ohjelman käyttämät syöttö- ja tulostiedot.
+TOTEUTA TIEDOSTOSTON LUKEMINEN
+
+Tämän lisäksi kuvaus kattaa myös muut tehtävänantoon liittyvät seikat, kuten alkuperäiseen tehtävään tehdyt tarkennukset ja muutokset sekä tiedot ohjelmiston rajoituksista ja pohdintaa sen mahdollisista laajennuksista.
+
+Ratkaisuperiaate 
+K-keskiarvo algoritmissa pisteet klusteroidaan k määrään klustereita pisteiden keskinäisen etäisyyden perusteella.
+Aluksi pisteiden joukosta arvotaan k pistettä ensimmäisiksi klustereiden keskpisteiden kandidaateiksi. Tämän jälkeen kaikki pisteet liitetään lähimpään kandidaattiin.
+Keskipisteet tarkennetaan iteroinnilla, jossa ensin lasketaan uudet keskipisteet edellisiin keskipistekandidaatteihin liitettyjen pisteiden perusteella. Tämän jälkeen etsitään kullekin pisteelle lähin keskipistekandidaatti ja päivitetään mahdollisesti sen kuuluminen klusteriin.  
+
+Lukija johdatellaan tehtävän ratkaisuun esittelemällä yhteenveto ratkaisun kulmakivistä ja peruskäsitteistöstä (ts. tehtävän kannalta oleelliset asiat selostetaan tiivistetysti käyttäen apuna esim. kuvia ja kaavioita). 
+Dokumentoitavia pääpiirteitä ovat mm. syöttö- ja tulostietojen käyttö, yleiset ratkaisuperiaatteet ja -kaavat, sovelletut algoritmit yms. Sanallisessa selostuksessa on vältettävä tarpeettomia yksityiskohtia kuten laitteisto-, ympäristö- tai ohjelmointikielikohtaisia termejä. Tavoitteena on laatia teksti siten, että sen läpi lukemalla käy ilmi, onko työn tekijä ymmärtänyt tehtävänannon oikein ja ratkaissut sen mielekkäästi.
+
+Ohjelman ja sen osien kuvaaminen (lähinnä moduulien kuvaus kohdasta 3.5) 
+
+Moduulien kuvaus  Jokainen moduuli kuvataan omassa aliluvussaan selkeästi ja paneutumatta teknisiin yksityiskohtiin (ts. kuvaus ei sisällä suoraa ohjelmakoodia, vaan toteutukselliset seikat dokumentoidaan ohjelmalistaukseen). Moduulin kuvaus jakautuu julkiseen ja implementointiin liittyvään rajapintaan, jotka ryhmitellään tarkoituksenmukaisella tavalla. Esimerkiksi metodit avaaTiedosto(), lueTiedostosta(), kirjoitaTiedostoon() ja suljeTiedosto() voidaan dokumentoida yhdessä tiedostonkäsittelyyn liittyvinä piirteinä. Samoin voidaan menetellä esimerkiksi tietorakenteiden käsittelyn dokumentoinnissa.
+Moduulin rajapintojen määrittely perustuu sen proseduurien ja funktioiden (joita kutsutaan yhteisnimellä rutiini tai metodi) rajapintoihin. Rutiineista (myös mahdollisista luonti- ja alustusrutiineista) dokumentoidaan niiden otsake (eli rutiinin nimi, parametrien nimet ja tyypit sekä mahdollisen paluutuloksen tyyppi), ytimekäs sanallinen kuvaus siitä mitä rutiini tekee, parametrien rajoitukset, paluutuloksen tulkinta, virhetilanteisiin reagointi (esim. poikkeusten nosto), ja syntyneet muutokset (ts. sivuvaikutukset) tietorakenteisiin, syöttöön ja tulostukseen. Tämän lisäksi kuvataan attribuuttien ja vakioiden tarkoitus luokassa. 
+Rutiinit jotka liittyvät mallin ohjaukseen (mm. juurimoduulissa oleva pääohjelma) tai ovat tehtävän ratkaisun kannalta oleellisia voidaan tarvittaessa kuvata algoritmisesti esimerkiksi pseudokoodilla. 
+Käyttöliittymän ohjelmallinen toteutus dokumentoidaan kuten muutkin ohjelmiston osat. Sen sijaan käyttöliittymän toimintaa käsitellään lähinnä työselostuksen liitteenä olevassa käyttöohjeessa sekä mahdollisesti testien kuvauksessa.
+
+
+Testausjärjestely 
+Testauksen tarkoituksena on varmistaa empiirisesti, että ohjelma toimii oikein. Testausjärjestelyn ja testauksessa tehtyjen havaintojen kuvaaminen on olennainen osa harjoitustyön tekemistä; testaamista ei saa koskaan jättää työn ohjaajan tehtäväksi. Testausta voidaan tehdä kahdella tasolla: 
+•   moduulien erillinen testaus: varmistetaan että moduulin sisäinen toteutus vastaa liittymän kuvausta 
+•   ohjelmiston verifiointi: varmistetaan että annettu ongelma ratkaistaan oikein 
+Moduulien erillinen testaus huolehtii ohjelmiston erillisten rakennekomponenttien eheydestä, jolloin ohjelmiston verifioinnin osaksi jää komponenttien välisten liitosten toimivuus. Testausta ei kannata miettiä jälkikäteen, vaan sitä on suunniteltava jo ohjelmistoa kehitettäessä. Testausta varten kehitetyt osat on syytä jättää myös valmiiseen ohjelmistoon, sillä ne ovat ensiarvoisen tärkeitä ohjelmiston jatkokehityksessä. 
+Ohjelmiston verifiointia varten tarvitaan tarkasti mietittyjä testiaineistoja, minkä vuoksi testien laatijalla on oltava selvä kuva ongelmasta ja sen ratkaisusta. Tämän tietämyksen pohjalta hän voi suunnitella ytimekkään testistrategian, joka sisältää joukon erikoistapauksia ja muutamia perustapauksia. Jotta testaus olisi hallittavissa, testiaineiston tapausten on kohdistuttava niihin ohjelmiston osiin, joissa virheiden esiintyminen on todennäköisintä — kuitenkaan unohtamatta aineiston monipuolisuutta. Yleisenä ohjeena voidaan pitää sitä, että yksi testiaineisto testaa yhden ohjelmisto-osan toimintaa (esim. omat ajot virhesyötteistä toipumisen testaamiseksi, erikoistapauksiin ja normaalisyötteisiin). Testiohjelmien tulosten on oltava helposti tarkastettavissa (ts. testiohjelman pitää itse analysoida mahdollimman pitkälle tulosten oikeellisuus). Huolellisesti tehty testiajo (ja -ohjelma) on myös havainnollinen esimerkki siitä, miten ohjelmisto toimii kokonaisuutena.
+Testiohjelman dokumentointia tärkeämpää on testistrategian selkeä kuvaus. Testiajojen tulostukset liitetään sellaisenaan mukaan dokumenttiin. Tämän lisäksi työselostuksessa esitellään, millaisilla syötteillä ohjelmaa on testattu sekä miten ohjelma niillä toimii. 
+
+
+Liitteet: 
+o   alkuperäinen tehtävänanto 
+o   yksityiskohtaisesti kommentoitu ohjelmalistaus 
+o   käyttöohje 
+
