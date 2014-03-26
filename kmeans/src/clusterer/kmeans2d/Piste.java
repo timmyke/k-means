@@ -11,15 +11,31 @@ package clusterer.kmeans2d;
  * @author timi
  */
 public class Piste {
-    // Nää on perkele propertyjä.
-    // Eli luvallista käyttää suoraan niitä perkeleen propertyjä
-    // ilman aksessorei. Eli ei vikistä siellä.
     public double X;
     public double Y;
     public int Group;
+
+    /**
+     * Konstruktori
+     *
+     * @param x
+     * @param y
+     */
     public Piste(double x, double y) {
-    	this.X = x;
-    	this.Y = y;
+        this.X = x;
+        this.Y = y;
     }
-    public Piste() {}
+
+    public Piste() {
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "(" + this.X + ", " + this.Y + ")";
+    }
 }
