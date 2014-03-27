@@ -26,7 +26,7 @@ public class Kmeans2d {
      *            Kuinka moneen klusteriin jaetaan i
      * @param maxIter
      *            Iteraatioiden maksimimäärä
-     * @return
+     * @return Tarkennetut keskipisteet
      */
     public static List<Piste> GetKmeans2d(List<Piste> pisteet, int k,
                                           int maxIter) throws Exception {
