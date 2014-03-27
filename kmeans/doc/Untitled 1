@@ -38,26 +38,99 @@ Dokumentoitavia pääpiirteitä ovat mm. syöttö- ja tulostietojen käyttö, yl
 Ohjelman ja sen osien kuvaaminen (lähinnä moduulien kuvaus kohdasta 3.5) 
 
 
-GetKmeans2d(List<Piste> pisteet, int k, int maxIter) 
-Metodi ottaa vastaan kolme parametria: kokoelman pisteitä (List<Piste> pisteet), klustereiden kokonaismäärän (int k) sekä iteraatioiden maksimimäärän.
 
-List<Piste> pisteet sisältää listauksen kaikista pisteistä. Klustereiden kokonaismäärä puolestaan on ennalta määrätty määrä klustereita. Iteraatioiden maksimimäärä puolestaan on ohjelmallinen rajoite laskentakierroksille.
-Koska klusterien koordinaatit ovat (lähes) aina approksimaatioita eikä tarkkaan tulokseen siten päästä, on iteraatiokerrat rajoitettava johonkin mielekkääseen määrään. Iteraatiokerralla tässä tarkoitetaan sitä operaatiota, joka tarkentaa klusteriden sijaintia 2d-pistejoukossa. 
-Metodi palauttaa suorituksen päätyttyä keskipisteiden tarkennettuine sijaintineen.
+
+
+
+
+
+GetKmeans2d(List<Piste> pisteet, int k, int maxIter) 
+	Metodi ottaa vastaan kolme parametria: kokoelman pisteitä (List<Piste> pisteet), klustereiden kokonaismäärän (int k) sekä iteraatioiden maksimimäärän.
+
+	List<Piste> pisteet sisältää listauksen kaikista pisteistä. Klustereiden kokonaismäärä puolestaan on ennalta määrätty määrä klustereita. Iteraatioiden maksimimäärä puolestaan on ohjelmallinen rajoite laskentakierroksille.
+	Koska klusterien koordinaatit ovat (lähes) aina approksimaatioita eikä tarkkaan tulokseen siten päästä, on iteraatiokerrat rajoitettava johonkin mielekkääseen määrään. Iteraatiokerralla tässä tarkoitetaan sitä operaatiota, joka tarkentaa klusteriden sijaintia 2d-pistejoukossa. 
+	Metodi palauttaa suorituksen päätyttyä keskipisteiden tarkennettuine sijaintineen.
 
 Metodin toiminta:
 
-Klustereiden valinta <otsikko>
-Metodin alussa valitaan satunnaisesti arpomalla k-kappaletta pisteitä. Pisteet talletetaan keskipisteet-kokoelmaan ja ne toimivat klustereina, joita ruvetaan myöhemmin tarkentamaan.
+Klustereiden valinta 
+	Metodin alussa valitaan satunnaisesti arpomalla k-kappaletta pisteitä. Pisteet talletetaan keskipisteet-kokoelmaan ja ne toimivat klustereina, joita ruvetaan myöhemmin tarkentamaan.
 
 Pisteiden liittäminen klustereihin <otsikko>
 Seuraavassa vaiheessa jokainen yksittäinen piste liitetään geometrisesti lähimpään klusteriin.
 Pisteiden liittäminen klustereihin tapahtuu LiitaLahimpaankeksukseen() -metodissa.
 
 Klustereiden tarkennus iteroimalla
-Satunnaisesti valittuja klustereita tarkennetaan iteroimalla niitä maksimissaan maxiter-kertaa:
-1. Iteraation alusssa klustereiden keskipisteiden sijainti päivitetään klusteriin liitettyjen pisteiden perusteella. Tähän operaatioon metodi kutsuu PaivitaKeskipisteenSijainti(k, pisteet) -metodia.
-2. Seuraavaksi pisteet liitetään aiemmassa vaiheessa tarkenettuihin klustereihin. Liittäminen tapahtuu LiitaLahimpaanKeskukseen(pisteet, keskipisteet) -metodissa.
+	Satunnaisesti valittuja klustereita tarkennetaan iteroimalla niitä maksimissaan maxiter-kertaa:
+	1. Iteraation alusssa klustereiden keskipisteiden sijainti päivitetään klusteriin liitettyjen pisteiden perusteella. Tähän operaatioon metodi kutsuu PaivitaKeskipisteenSijainti(k, pisteet) -metodia.
+	2. Seuraavaksi pisteet liitetään aiemmassa vaiheessa tarkenettuihin klustereihin. Liittäminen tapahtuu LiitaLahimpaanKeskukseen(pisteet, keskipisteet) -metodissa.
+
+Virhetilanteet
+	Virhetilanteissa heitetään exception eli poikkeus. Poikkeus heitetään tilanteissa, joissa pisteitä on vähemmän kuin k:kpl.
+
+Sivuvaikutuksena pisteet liitetään klustereihin.
+
+
+
+
+
+
+
+
+
+LiitaLahimpaanKeskukseen(List<Piste> pisteet, List<Piste> keskipisteet)
+
+	Kutsuu jokaiselle pisteet-kokoelman jäsenelle funktiota LahinKeskus, joka ottaa vastaan pisteen sekä kaikki klusterit.
+	Sivuvaikutuksena pisteet liitetään klustereihin.
+
+	
+	
+	
+	
+	
+	
+	
+LähinKeskus(Piste vertailupiste, List<Piste> keskipisteet)
+	LahinKeskus liittää yksittäisen pisteen lähimpään klusteriin. 
+
+	Funktion toiminta-ajatuksena on laskea vertailupisteen etäisyys jokaiselle keskipisteelle ja se liitetään lähimpään keskipisteeseen (=sivuvaikutus), eli keskipisteeseen,
+	johon sen etäisyys on pienin.
+
+	vertailupiste on piste, joka liitetään klusteriin.
+	Keskipisteet -kokoelma on klusteri joukko, josta etitään lähin keskipiste.
+
+	Etäisyys lasketaan käyttäen apuna EtaisyydenNelio(Piste a, Piste b) -funktiota.
+
+
+	
+	
+	
+	
+
+PaivitaKeskipisteenSijainti(int k, List<Piste> pisteet)
+	int k on klusterin numero.
+	List<Piste> pisteet kaikki pisteet. 
+
+	Metodi laskee uuden keskipisteen sijainnin laskemalla ensiksi klusteriin liitettyjen pisteiden kehyksen, eli kaikkien pisteiden yhteenlasketun leveyden ja korkeuden.
+	Lopuksi tämän kehyksen keskipiste lasketaan ja siitä tulee klusteri.
+	
+	Metodilla ei ole sivuvaikutuksia. 
+	
+	
+	
+	
+	-- Täytyy kyl jaktaa tätä dokkaria vaikka google docsissa tai jossain. Tässä tän kirjoittaminen on aika karmeaa.
+
+
+
+
+
+
+
+
+
+
+
 
 
 Dokumentoidaan:
