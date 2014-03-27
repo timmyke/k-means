@@ -49,19 +49,19 @@ public class Kmeans2d {
             }
         }
 
-        // Liittään pisteen arvottuihin klusterihin
-        LiitaLahimpaanKeskukseen(pisteet, keskipisteet);
-
         // Tarkenetaan satunnaisesti valittuja klustereita
         int iter = 0;
+        boolean changed = false;
         do {
+            // Liitetään pisteet tarkennettuihin klustereihin.
+            changed = LiitaLahimpaanKeskukseen(pisteet, keskipisteet);
+
             // Päivitetään klusterin keskipisteiden sijainti klusteriin
             // liitettyjen pisteiden perusteella.
             keskipisteet = PaivitaKeskipisteenSijainti(k, pisteet);
-            // Liitetään pisteet tarkennettuihin klustereihin.
-            LiitaLahimpaanKeskukseen(pisteet, keskipisteet);
+
             iter++;
-        } while (iter < maxIter);
+        } while ((iter < maxIter) && changed);
 
         return keskipisteet;
     }
@@ -101,12 +101,19 @@ public class Kmeans2d {
      *            Pisteet, jotka liitetään klusteriin (huom. sivuvaikutus)
      * @param keskipisteet
      *            Klusterit
+     * @return true, jos jokin piste on vaihtanut klusteria, false muulloin
      */
-    private static void LiitaLahimpaanKeskukseen(List<Piste> pisteet,
-                                                 List<Piste> keskipisteet) {
+    private static boolean LiitaLahimpaanKeskukseen(List<Piste> pisteet,
+                                                    List<Piste> keskipisteet) {
+        boolean changed = false;
         for (Piste p : pisteet) {
+            int oldGroup = p.Group;
             p.Group = LahinKeskus(p, keskipisteet);
+            if (oldGroup != p.Group) {
+                changed = true;
+            }
         }
+        return changed;
     }
 
     /**
