@@ -54,11 +54,11 @@ public class Kmeans2d {
         boolean changed = false;
         do {
             // Liitetään pisteet tarkennettuihin klustereihin.
-            changed = LiitaLahimpaanKeskukseen(pisteet, keskipisteet);
+            changed = liitaLahimpaanKeskukseen(pisteet, keskipisteet);
 
             // Päivitetään klusterin keskipisteiden sijainti klusteriin
             // liitettyjen pisteiden perusteella.
-            keskipisteet = PaivitaKeskipisteenSijainti(k, pisteet);
+            keskipisteet = paivitaKeskipisteet(k, pisteet);
 
             iter++;
         } while ((iter < maxIter) && changed);
@@ -76,7 +76,7 @@ public class Kmeans2d {
      * @return lahimman klusterin numero
      */
     private static int
-            LahinKeskus(Piste vertailupiste, List<Piste> keskipisteet) {
+            lahinKeskus(Piste vertailupiste, List<Piste> keskipisteet) {
         Piste min = keskipisteet.get(0);
         double dis = Double.POSITIVE_INFINITY;
         for (Piste p : keskipisteet) {
@@ -85,7 +85,7 @@ public class Kmeans2d {
              * etäisyyden neliöistä voidaan jo suoraan päätellä kumpi
              * pisteistä on lähimpänä.
              */
-            double d = EtaisyydenNelio(vertailupiste, p);
+            double d = etaisyydenNelio(vertailupiste, p);
             if (d < dis) {
                 min = p;
                 dis = d;
@@ -103,12 +103,12 @@ public class Kmeans2d {
      *            Klusterit
      * @return true, jos jokin piste on vaihtanut klusteria, false muulloin
      */
-    private static boolean LiitaLahimpaanKeskukseen(List<Piste> pisteet,
+    private static boolean liitaLahimpaanKeskukseen(List<Piste> pisteet,
                                                     List<Piste> keskipisteet) {
         boolean changed = false;
         for (Piste p : pisteet) {
             int oldGroup = p.Group;
-            p.Group = LahinKeskus(p, keskipisteet);
+            p.Group = lahinKeskus(p, keskipisteet);
             if (oldGroup != p.Group) {
                 changed = true;
             }
@@ -125,22 +125,21 @@ public class Kmeans2d {
      *            2. piste
      * @return etaisyyden nelio
      */
-    private static double EtaisyydenNelio(Piste a, Piste b) {
+    private static double etaisyydenNelio(Piste a, Piste b) {
         return Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2);
     }
 
     /**
-     * Päivittää klusterin keskipisteen siihen kuuluvien pisteiden sijainnin
-     * perusteella
+     * Palauttaa uudet klusterien keskipisteet.
      *
      * @param k
-     *            Klusterin numero
+     *            Klusterien lukumaara
      * @param pisteet
      *            Kaikki pisteet, joiden perusteella valitaan klusterin
      *            numeron perusteella klusteriin kuuluvat pisteet.
      * @return Uudet keskipisteet
      */
-    private static List<Piste> PaivitaKeskipisteenSijainti(int k,
+    private static List<Piste> paivitaKeskipisteet(int k,
                                                            List<Piste> pisteet) {
         List<double[]> keskipisteet = new ArrayList<double[]>(k);
         for (int i = 0; i < k; i++) {
