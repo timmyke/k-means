@@ -75,7 +75,7 @@ public class Kmeans2d {
      *            klustereiden keskipisteet
      * @return lahimman klusterin numero
      */
-    private static int
+    public static int
             lahinKeskus(Piste vertailupiste, List<Piste> keskipisteet) {
         Piste min = keskipisteet.get(0);
         double dis = Double.POSITIVE_INFINITY;
@@ -103,7 +103,7 @@ public class Kmeans2d {
      *            Klusterit
      * @return true, jos jokin piste on vaihtanut klusteria, false muulloin
      */
-    private static boolean liitaLahimpaanKeskukseen(List<Piste> pisteet,
+    public static boolean liitaLahimpaanKeskukseen(List<Piste> pisteet,
                                                     List<Piste> keskipisteet) {
         boolean changed = false;
         for (Piste p : pisteet) {
@@ -125,7 +125,7 @@ public class Kmeans2d {
      *            2. piste
      * @return etaisyyden nelio
      */
-    private static double etaisyydenNelio(Piste a, Piste b) {
+    public static double etaisyydenNelio(Piste a, Piste b) {
         return Math.pow(a.X - b.X, 2) + Math.pow(a.Y - b.Y, 2);
     }
 
@@ -139,7 +139,7 @@ public class Kmeans2d {
      *            numeron perusteella klusteriin kuuluvat pisteet.
      * @return Uudet keskipisteet
      */
-    private static List<Piste> paivitaKeskipisteet(int k,
+    public static List<Piste> paivitaKeskipisteet(int k,
                                                            List<Piste> pisteet) {
         List<double[]> keskipisteet = new ArrayList<double[]>(k);
         for (int i = 0; i < k; i++) {
