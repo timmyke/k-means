@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package kmeans;
 
 import clusterer.test.Testi;
@@ -21,5 +15,5 @@ public class Kmeans {
         // TODO code application logic here
         Testi.main(args);
     }
-    
+
 }
