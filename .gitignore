@@ -5,3 +5,4 @@
 *.war
 *.ear
 /kmeans/build/
+/kmeans/dist/
